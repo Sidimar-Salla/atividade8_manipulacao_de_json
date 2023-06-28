@@ -1,0 +1,31 @@
+id_disciplina,nome,credito
+D001,Matemática,4
+D002,História,3
+D003,Física,5
+D004,Química,4
+D005,Biologia,4
+D006,Inglês,2
+D007,Geografia,3
+D008,Economia,3
+D009,Filosofia,2
+D010,Sociologia,2
+D011,Artes,2
+D012,Literatura,3
+D013,Programação,4
+D014,Administração,4
+D015,Direito,5
+D016,Psicologia,3
+D017,Marketing,3
+D018,Engenharia Civil,6
+D019,Medicina,6
+D020,Enfermagem,5
+D021,Nutrição,4
+D022,Educação Física,3
+D023,Arquitetura,5
+D024,Ciências Políticas,3
+D025,Música,2
+D026,Design,3
+D027,Comunicação,4
+D028,Engenharia Elétrica,6
+D029,Farmácia,5
+D030,Jornalismo,4
