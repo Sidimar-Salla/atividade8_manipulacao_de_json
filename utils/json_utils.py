@@ -22,9 +22,3 @@ class JsonUtils:
         
         else:
             raise (f"Erro ao importar json. Código do erro: {response.status_code}")
-
-
-
-
-url = "https://fmsampaio.github.io/helper-sites/json-examples/disciplinas.json"
-print(JsonUtils(url).__json__())
