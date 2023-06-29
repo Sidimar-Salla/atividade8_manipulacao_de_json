@@ -1,8 +1,6 @@
 from utils.json_utils import JsonUtils
 from utils.pandas_utils import PandasUtils
 
-from time import sleep
-
 class UpdateDB:
     '''
         Classe usada para atualizar a base de dados

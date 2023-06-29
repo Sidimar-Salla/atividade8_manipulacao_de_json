@@ -1,6 +1,6 @@
 from utils.json_utils import JsonUtils
 from utils.pandas_utils import PandasUtils
-from services.update_db_utils import UpdateDB
+from services.update_db_service import UpdateDB
 
 
 # url = "https://fmsampaio.github.io/helper-sites/json-examples/disciplinas.json"
