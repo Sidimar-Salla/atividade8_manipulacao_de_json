@@ -1,13 +1,13 @@
-from utils.json_utils import JsonUtils
-from utils.pandas_utils import PandasUtils
-from services.update_db_service import UpdateDB
+import dash
+import dash_bootstrap_components as dbc
+from dash import Dash, html
+from components.login import LoginComponent
 
+app = Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 
-# url = "https://fmsampaio.github.io/helper-sites/json-examples/disciplinas.json"
-# # url = "https://fmsampaio.github.io/helper-sites/json-examples/alunos.json"
+app.layout = html.Div(
+    LoginComponent().layout,
+)
 
-# json = JsonUtils(url).__json__()
-
-# print(PandasUtils().jsonToDataframe(json))
-
-UpdateDB().updateTableEstudantes()
+if __name__ == "__main__":
+    app.run_server(debug=True)
