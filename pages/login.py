@@ -3,8 +3,6 @@ from dash import html, Input, Output, dcc, callback
 import dash_bootstrap_components as dbc
 import hashlib
 import pathlib
-from functools import lru_cache
-from time import sleep
 
 
 class LoginComponent:
@@ -73,31 +71,14 @@ class LoginComponent:
                     className="p-3 col-md-6 offset-md-3",
                 ),
             ),
-            # style={
-            #     "background-color": "red"
-            # },
             class_name="max-height"
         )
-    
-    
-    # dbc.Col(
-    #         dbc.Card(
-    #             dbc.Container(
-    #                 [
-                        
-    #                     html.Div(
-    #                         [
-                                
-    #                         ]
-    #                     ),
-    #             ], className="p-3 position-relative")
-    #         ), 
-    #         # className="p-3",
-    #         width=6,
-    #         style={
-    #             "background-color": "red"
-    #         }
-    #     )
 
     def events(self) -> None:
         pass
+
+
+dash.register_page(__name__, path='/')
+
+layout = LoginComponent().layout
+

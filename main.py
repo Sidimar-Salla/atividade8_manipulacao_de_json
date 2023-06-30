@@ -1,12 +1,17 @@
 import dash
 import dash_bootstrap_components as dbc
 from dash import Dash, html
-from components.login import LoginComponent
 
-app = Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = Dash(external_stylesheets=[dbc.themes.BOOTSTRAP], use_pages=True)
 
 app.layout = html.Div(
-    LoginComponent().layout,
+    [
+        dbc.Spinner(
+            dash.page_container,
+            fullscreen_style =True,
+            delay_hide=1000
+        )
+    ]
 )
 
 if __name__ == "__main__":
