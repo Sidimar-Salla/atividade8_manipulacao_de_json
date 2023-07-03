@@ -19,13 +19,8 @@ class HomeComponent:
     @property
     def layout(self):
         self.load_data()
-        return dbc.Container(
-            html.H1("É os guri!")
-        )
+        return html.Div()
 
     def events(self) -> None:
         pass
 
-dash.register_page(__name__, path='/home')
-
-layout = HomeComponent().layout

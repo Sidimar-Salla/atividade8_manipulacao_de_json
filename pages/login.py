@@ -1,5 +1,5 @@
 import dash
-from dash import html, Input, Output, dcc, callback
+from dash import html, Input, Output, dcc, callback, register_page
 import dash_bootstrap_components as dbc
 import hashlib
 import pathlib
@@ -49,7 +49,9 @@ class LoginComponent:
                                         children="Login",
                                         color="primary",
                                         className="d-grid gap-2 col-7 mx-auto mt-3 rounded-pill",
-                                        href="home"
+                                        href="home",
+                                        n_clicks=0,
+                                        id=self.id("submit-login")
                                     )
                                     
                                 ],
@@ -78,7 +80,7 @@ class LoginComponent:
         pass
 
 
-dash.register_page(__name__, path='/')
+register_page(__name__, path='/')
 
 layout = LoginComponent().layout
 
