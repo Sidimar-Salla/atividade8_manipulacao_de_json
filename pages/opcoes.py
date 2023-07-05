@@ -9,7 +9,6 @@ from time import sleep
 from services.update_db_service import UpdateDB
 
 
-
 class OpcoesPage:
     def __init__(self) -> None:
         self._id = hashlib.md5(
@@ -27,12 +26,28 @@ class OpcoesPage:
         self.load_data()
         return dbc.Col([
             dbc.Row([
+                dbc.Toast(
+                    "Atualizado com sucesso!",
+                    id=self.id("toast"),
+                    header="BASE DE DADOS",
+                    is_open=False,
+                    dismissable=True,
+                    icon="success",
+                    duration=10000,
+                    style={
+                        "position": "fixed",
+                        "top": "10px",
+                        "right": "10px",
+                        "zIndex": "9999"
+                    }
+                ),
+
                 html.H1("Atualizar base de dados"),
                 dbc.Spinner([
                     dbc.Button("Atualizar",
                             id=self.id("button-update"),
                             n_clicks=0
-                            ),
+                               ),
                     html.Br(),
                     dbc.Alert(
                         "Base de dados atualizado com sucesso!!!",
@@ -48,7 +63,8 @@ class OpcoesPage:
 
     def events(self) -> None:
         @callback(
-            Output(self.id("alert"), "is_open"),
+            # Output(self.id("alert"), "is_open"),
+            Output(self.id("toast"), "is_open"),
             Input(self.id("button-update"), "n_clicks")
         )
         def updateDb(n):
@@ -65,8 +81,6 @@ class OpcoesPage:
                 return True
 
 
-
 register_page(__name__, path='/opcoes')
 
 layout = OpcoesPage().layout
-
