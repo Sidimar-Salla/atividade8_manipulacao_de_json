@@ -32,8 +32,10 @@ class UpdateDB:
             # Verifica se o estudante já existe 
             if not PandasUtils().isExists(
                 path=path_db,
-                column="id_estudante",
-                value=infos["id_estudante"]
+                column1="id_estudante",
+                value1=infos["id_estudante"],
+                colunm2="nome",
+                value2=infos["nome"]
             ):
 
                 # Se o aluno não estiver na base de dados ele é adicionado
@@ -74,12 +76,10 @@ class UpdateDB:
                 # Testa se o dado já existe
                 if not PandasUtils().isExists(
                     path=path_db,
-                    column="id_estudante",
-                    value=infos["id_estudante"]
-                ) and not PandasUtils().isExists(
-                    path=path_db,
-                    column="id_disciplina",
-                    value=infos["id_disciplina"]
+                    column1="id_estudante",
+                    value1=infos["id_estudante"],
+                    colunm2="id_disciplina",
+                    value2=infos["id_disciplina"]
                 ):
                     
                     # Adiciona a informação
@@ -87,6 +87,12 @@ class UpdateDB:
                         path=path_db,
                         infos=infos
                     )
+
+                # else:
+
+                #     # Salva o valor por cima
+
+        
 
     def updateTableDisciplinas(self):
         '''
@@ -112,8 +118,10 @@ class UpdateDB:
             # Testa para ver se já existe a Disciplina
             if not PandasUtils().isExists(
                 path=path_db,
-                column="id_disciplina",
-                value=infos["id_disciplina"]
+                column1="id_disciplina",
+                value1=infos["id_disciplina"],
+                colunm2="nome",
+                value2=infos["nome"]
             ):
                 
                 # Não existir adiciona na base

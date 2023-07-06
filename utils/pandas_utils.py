@@ -22,7 +22,7 @@ class PandasUtils:
         '''
         return pd.DataFrame(json_data)
     
-    def isExists(self, path, column, value) -> bool:
+    def isExists(self, path, column1, value1, colunm2, value2) -> bool:
         '''
             Função para verificar se o valor existe do Dataframe
         '''
@@ -31,7 +31,7 @@ class PandasUtils:
         df = self.csvToDataframe(path)
 
         # Retorna se existe os não
-        return df[column].isin([value]).any()
+        return ((df[column1] == value1) & (df[colunm2] == value2)).any()
     
     def addInfo(self, path, infos):
         '''

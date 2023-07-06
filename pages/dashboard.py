@@ -3,6 +3,7 @@ from dash import html, Input, Output, dcc, callback
 import dash_bootstrap_components as dbc
 import hashlib
 import pathlib
+from utils.pandas_utils import PandasUtils
 
 class DashboardPage:
     def __init__(self) -> None:
@@ -14,7 +15,8 @@ class DashboardPage:
         return f"{name}-{self._id}"
 
     def load_data(self) -> None:
-        pass
+        self.num_disciplinas = len(PandasUtils().csvToDataframe("data\disciplinas.csv")["id_disciplina"])
+        self.num_alunos = len(PandasUtils().csvToDataframe("data\estudantes.csv")["id_estudante"])
 
     @property
     def layout(self):
@@ -26,8 +28,8 @@ class DashboardPage:
                 dbc.Col([
                     dbc.CardGroup([
                         dbc.Card([
-                            html.Legend('Alunos'),
-                            html.H5("5", id=self.id(
+                            html.Legend('Estudantes'),
+                            html.H5(self.num_alunos, id=self.id(
                                 "quant-automations"))
                         ], style={"padding-left": "20px", "padding-top": "10px"}),
                         dbc.Card([
@@ -40,34 +42,14 @@ class DashboardPage:
                                     }),
                         ], color="primary", style={"maxWidth": 75, "height": 100, "margin-left": "-10px"}),
                     ])
-                ], width=4),
-
-                # Card Quantidade de Alunos
-                dbc.Col([
-                    dbc.CardGroup([
-                        dbc.Card([
-                            html.Legend('Alunos'),
-                            html.H5("5", id=self.id(
-                                "quant-automations"))
-                        ], style={"padding-left": "20px", "padding-top": "10px"}),
-                        dbc.Card([
-                            html.Div(className="fa-solid fa-user-gear",
-                                    style={
-                                        "color": "white",
-                                        "textAlign": "center",
-                                        "fontSize": 30,
-                                        "margin": "auto",
-                                    }),
-                        ], color="primary", style={"maxWidth": 75, "height": 100, "margin-left": "-10px"}),
-                    ])
-                ], width=4),
+                ], width=6),
 
                 # Card Quantidade de Alunos
                 dbc.Col([
                     dbc.CardGroup([
                         dbc.Card([
                             html.Legend('Disciplinas'),
-                            html.H5("5", id=self.id(
+                            html.H5(self.num_disciplinas, id=self.id(
                                 "quant-automations"))
                         ], style={"padding-left": "20px", "padding-top": "10px"}),
                         dbc.Card([
@@ -80,7 +62,7 @@ class DashboardPage:
                                     }),
                         ], color="primary", style={"maxWidth": 75, "height": 100, "margin-left": "-10px"}),
                     ])
-                ], width=4),
+                ], width=6),
 
 
 
