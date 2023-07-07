@@ -16,119 +16,80 @@ class RelatoriosPage:
         return f"{name}-{self._id}"
 
     def load_data(self) -> None:
-        self.df = PandasUtils().csvToDataframe(
-            path="data\estudantes.csv"
-        )
+        self.list_estudantes = PandasUtils().csvToDataframe("data\estudantes.csv")["nome"].sort_values().values
+        self.list_disciplinas = PandasUtils().csvToDataframe("data\disciplinas.csv")["nome"].sort_values().values
 
     @property
     def layout(self):
         self.load_data()
         return dbc.Container([
             dbc.Row([
-                dbc.Col([
-                    html.H1(
-                        "Relatórios",
-                        className="text-center"
-                    ),
-                    html.Hr(),
+                html.H1("Relatórios", className="text-center"),
+                html.Hr(),
+
+                dbc.Tabs([
+
+                    dbc.Tab(
+                        [
+                            dbc.Row([
+                                dbc.Card([
+                                    dbc.CardBody([
+                                        html.P("Selecione o estudante que desejas gerar o Histórico Escolar", className="card-text"),
+
+
+                                        # html.Label("Selecionar Estudantes *"),
+                                        dcc.Dropdown(
+                                            options=self.list_estudantes,
+                                            id=self.id("dropdown-estudantes"),
+                                            clearable=False,
+                                            style={"width": "100%"},
+                                            placeholder="Selecionar",
+                                            multi=False,
+                                        ),
+
+                                    ], className="mt-2"),
+                                    dbc.CardFooter([
+                                        dbc.Button("Gerar", color="success", id=self.id("submit-historico-escolar"))           
+                                    ], className="mt-2"),
+
+                                ], className="mt-2")
+                            ])
+                        ], 
+                        label="Histórico Escolar", 
+                        tabClassName="flex-grow-1 text-center"),
+                    dbc.Tab(
+                        dbc.Card([
+                                    dbc.CardBody([
+                                        html.P("Seleciona a disciplina que desejas gerar o relatório", className="card-text"),
+
+                                        # html.Label("Selecionar Estudantes *"),
+                                        dcc.Dropdown(
+                                            options=self.list_disciplinas,
+                                            id=self.id("dropdown-disciplina"),
+                                            clearable=False,
+                                            style={"width": "100%"},
+                                            placeholder="Selecionar",
+                                            multi=False,
+                                        ),
+
+                                    ], className="mt-2"),
+                                    dbc.CardFooter([
+                                        dbc.Button("Gerar", color="success", id=self.id("submit-relatorio-disciplina"))           
+                                    ], className="mt-2"),
+
+                                ], className="mt-2"),
+                        label="Notas por Disciplina", 
+                        tabClassName="flex-grow-1 text-center"),
+
                 ])
-            ]),
-            dbc.Row([
-
-                # Primeiro Filtro
-                dbc.Col([
-                    html.H5('Base de Dados *'),
-                    dcc.Dropdown(
-                        ["Estudantes", "Disciplinas"],
-                        id=self.id("value-database"),
-                        multi=False
-                    )
-                ], width=4, 
-                style={"background-color": "yellow"}, 
-                className="p-4"),
-
-                # Segundo Filtro
-                dbc.Col([
-                    html.Div(id=self.id("children-second-filter"))
-                ], width=4, 
-                style={"background-color": "yellow"}, 
-                className="p-4"),  
-
-                # Terceiro Filtro
-                dbc.Col([
-                    html.Div(id=self.id("children-third-filter"))
-                ], width=4, 
-                    style={"background-color": "yellow"},
-                    className="p-4" 
-                ),
 
             ])
 
         ])
 
     def events(self) -> None:
-        @callback(
-            Output(self.id("children-second-filter"), "children"),
-            Input(self.id("value-database"), "value")
-        )
-        def updateSecondFilter(value):
-            options = []
-            if value is None:
-                raise PreventUpdate()
-            elif value == "Estudantes":
-                list_options = PandasUtils().csvToDataframe(
-                                    path="data\estudantes.csv"
-                                )["nome"].sort_values().to_list()
-            else:
-                list_options = PandasUtils().csvToDataframe(
-                                    path="data\disciplinas.csv"
-                                )["nome"].sort_values().to_list()
-
-            if value != []:
-                return html.Div([
-                    html.H5(value[:len(value)-1]),
-                    dcc.Dropdown(
-                        options=list_options,
-                        id=self.id("value-second-filter"),
-                        multi=False
-                    )
-                ])
+        pass
         
-        @callback(
-            Output(self.id("children-third-filter"), "children"),
-            Input(self.id("value-second-filter"), "value")
-        )
-        def updateThirdFilter(value):
-            df = PandasUtils().csvToDataframe(
-                                    path="data\estudantes.csv"
-                                )
-            
-            df_notas = PandasUtils().csvToDataframe(
-                                    path=r"data\notas.csv"
-                                )
-            
-            df_disciplinas = PandasUtils().csvToDataframe(
-                                    path="data\disciplinas.csv"
-                                )
-            
-            get_id_estudante = df.loc[df["nome"] == value, "id_estudante"].values[0]
-
-            cadeiras =df_notas.loc[df_notas["id_estudante"] == get_id_estudante, "id_disciplina"].values
-
-            disciplinas = df_disciplinas.loc[df_disciplinas["id_disciplina"].isin(cadeiras), "nome"].values
-
-            return html.Div([
-                html.H5("Disciplina(s)"),
-                dcc.Dropdown(
-                    options=disciplinas,
-                    id=self.id("value-second-filter"),
-                    multi=True
-                )
-            ])
-
-
-
-
 dash.register_page(__name__, path='/relatorios')
 
 layout = RelatoriosPage().layout

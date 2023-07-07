@@ -50,6 +50,22 @@ class PandasUtils:
         # Mensagem de sucesso
         print('Linha adicinada com sucesso!')
 
+    def mergeAllTables(self):
+        '''
+            Função que faz o merge de todas as 3 tabelas
+        '''
+
+        df_estudantes = self.csvToDataframe("data\estudantes.csv")
+        df_notas = self.csvToDataframe(r"data\notas.csv")
+        df_disciplinas = self.csvToDataframe("data\disciplinas.csv")
+
+        return pd.merge(
+            pd.merge(df_estudantes, df_notas, on="id_estudante", how="inner"), 
+            df_disciplinas, 
+            on="id_disciplina", 
+            how="inner"
+        )
+
 
 
     

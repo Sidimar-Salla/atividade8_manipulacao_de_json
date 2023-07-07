@@ -27,11 +27,14 @@ class OpcoesPage:
         self.load_data()
         return dbc.Col([
             dbc.Row([
-                html.H1("Atualizar base de dados"),
+                html.H1("Atualizar Base de Dados", className="text-center"),
+                html.Hr(),
+            ]),
+            dbc.Row([
                 dbc.Spinner([
                     dbc.Button("Atualizar",
                             id=self.id("button-update"),
-                            n_clicks=0
+                            n_clicks=0,
                             ),
                     html.Br(),
                     dbc.Alert(
@@ -42,8 +45,8 @@ class OpcoesPage:
                         is_open=False,
                     ),
                 ]),
-
             ])
+
         ])
 
     def events(self) -> None:
