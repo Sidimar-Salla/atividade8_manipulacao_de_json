@@ -55,17 +55,17 @@ class OpcoesPage:
             Input(self.id("button-update"), "n_clicks")
         )
         def updateDb(n):
-            if n == 0:
+            if not n:
                 raise PreventUpdate
-            else:
-                # Atualiza base de dados
-                UpdateDB().updateTableDisciplinas()
-                sleep(1)
-                UpdateDB().updateTableEstudantes()
-                sleep(1)
-                UpdateDB().updateTableNotas()
 
-                return True
+            # Atualiza base de dados
+            UpdateDB().updateTableDisciplinas()
+            sleep(1)
+            UpdateDB().updateTableEstudantes()
+            sleep(1)
+            UpdateDB().updateTableNotas()
+
+            return True
 
 
 

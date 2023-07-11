@@ -1,10 +1,11 @@
 import dash
-from dash import html, Input, Output, dcc, callback
+from dash import html, Input, Output, dcc, callback, State
 import dash_bootstrap_components as dbc
 import hashlib
 import pathlib
 from dash.exceptions import PreventUpdate
 from utils.pandas_utils import PandasUtils
+from utils.xlsxwritter_utils import CreateXslxHistoricoEscolar, CreateXslxRelatorioDisciplina
 
 class RelatoriosPage:
     def __init__(self) -> None:
@@ -24,6 +25,11 @@ class RelatoriosPage:
         self.load_data()
         return dbc.Container([
             dbc.Row([
+
+                dcc.Download(id=self.id('download-arquive-aluno')),
+                dcc.Download(id=self.id('download-arquive-disciplina')),
+                dcc.Download(id=self.id('teste')),
+
                 html.H1("Relatórios", className="text-center"),
                 html.Hr(),
 
@@ -80,15 +86,64 @@ class RelatoriosPage:
                                 ], className="mt-2"),
                         label="Notas por Disciplina", 
                         tabClassName="flex-grow-1 text-center"),
-
                 ])
-
             ])
-
         ])
 
     def events(self) -> None:
-        pass
+        @callback(
+            Output(self.id('download-arquive-aluno'), 'data'),
+            Input(self.id("submit-historico-escolar"), 'n_clicks'),
+            State(self.id("dropdown-estudantes"), 'value'),
+            prevent_initial_call=True
+        )
+        def exportHistoricoEscolar(n_clicks, name):
+            if not n_clicks:
+                raise PreventUpdate
+
+            # Merge todas as tabelas
+            df = PandasUtils().mergeAllTables()
+
+            # Aplica o filtro com o nome da pessoa
+            df = df.loc[df['nome_x'] == name].reset_index()
+
+            # Cria o csv
+            path_name = CreateXslxHistoricoEscolar(
+                studant_name=name,
+                registration=df['id_estudante'].values[0],
+                media_geral=round(df['nota'].mean(), 2),
+                total_cred=round(df['credito'].mean(), 2),
+                df_values=df
+            ).returnPath()
+
+            return dcc.send_file(path_name)
+            
+        @callback(
+            Output(self.id('teste'), 'data'),
+            Input(self.id('submit-relatorio-disciplina'), 'n_clicks'),
+            State(self.id("dropdown-disciplina"), 'value'),
+            prevent_initial_call=True
+        )
+        def exportRelatorioDisciplina(n_clicks, disciplina):
+            if not n_clicks:
+                raise PreventUpdate
+                
+            # Merge todas as tabelas
+            df = PandasUtils().mergeAllTables()
+
+            # Aplica o filtro com o nome da pessoa
+            df = df.loc[df['nome_y'] == disciplina].reset_index()
+
+            # Cria o xlsx
+            path_arquive = CreateXslxRelatorioDisciplina(
+                disciplina=disciplina,
+                id_disciplina=df['id_disciplina'].values[0],
+                credito=df['credito'].values[0],
+                df=df
+            ).returnPath()
+
+            return dcc.send_file(path_arquive)
+
         
 dash.register_page(__name__, path='/relatorios')
 

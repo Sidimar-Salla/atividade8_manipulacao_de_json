@@ -137,10 +137,10 @@ class DashboardPage:
             prevent_initial_call=True
         )
         def cleanFilter(n_clicks):
-            if n_clicks is None:
+            if not n_clicks:
                 raise PreventUpdate
-            else:
-                return None, None
+            
+            return None, None
             
         @callback(
             Output(self.id('graph1'), 'figure'),
@@ -152,38 +152,38 @@ class DashboardPage:
             prevent_initial_call=True
         )
         def updateFigure(n_clicks, value_aluno, value_disciplina):
-            if n_clicks is None:
+            if not n_clicks:
                 raise PreventUpdate()
+            
+            df = PandasUtils().mergeAllTables()
+
+            df = df[["nome_x", "nome_y", "nota"]]
+
+            if not value_aluno is None:
+
+                df = df.loc[df["nome_x"].isin(value_aluno)]
+
+            if not value_disciplina is None:
+
+                df = df.loc[df["nome_y"].isin(value_disciplina)]
+
+            if value_aluno is None:
+                fig = px.scatter(df,
+                            x="nome_x",
+                            y="nota",
+                            title='Gráfico de Notas',
+                            color='nome_y',
+                            )
+
             else:
-                df = PandasUtils().mergeAllTables()
-
-                df = df[["nome_x", "nome_y", "nota"]]
-
-                if not value_aluno is None:
-
-                    df = df.loc[df["nome_x"].isin(value_aluno)]
-
-                if not value_disciplina is None:
-
-                    df = df.loc[df["nome_y"].isin(value_disciplina)]
-
-                if value_aluno is None:
-                    fig = px.scatter(df,
-                                x="nome_x",
+                fig = px.scatter(df,
+                                x="nome_y",
                                 y="nota",
                                 title='Gráfico de Notas',
-                                color='nome_y',
+                                color='nome_x',
                                 )
-
-                else:
-                    fig = px.scatter(df,
-                                    x="nome_y",
-                                    y="nota",
-                                    title='Gráfico de Notas',
-                                    color='nome_x',
-                                    )
-                    
-                return fig
+                
+            return fig
                 
 
 
